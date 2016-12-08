@@ -1,9 +1,9 @@
 #Parallel implementation of kNN using MPI#
 
-<p>There are 3 versions of kNN implemented:
-    *Serial version with C++
-    *Version 1 with C++ and MPI
-    *Version 2 with C++ and MPI
+<p>There are 3 versions of kNN implemented:<br/>
+    *Serial version with C++<br/>
+    *Version 1 with C++ and MPI<br/>
+    *Version 2 with C++ and MPI<br/>
 </p>
 
 ###Version 1 with C++ and MPI###
@@ -24,5 +24,5 @@ To run the exec: mpirun -np (*num of processors*) (*name of exec*)
 
 
 ###Experiment with 100 test instances (serial / version 1 / version2):###
-![screen_shot_1](http://prnt.sc/dgzcq1)
+![screen_shot_1](http://image.prntscr.com/image/94da8a0f13dc47e686112c488908dfff.png)
 
