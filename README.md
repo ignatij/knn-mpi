@@ -7,7 +7,7 @@
 </p>
 
 <p>The training set: https://archive.ics.uci.edu/ml/datasets/Skin+Segmentation# <br/>
-It has 245057 instances. The test set has 100 instances, random generated that haven't occurred in the training set.
+It has 245057 instances. The test set has 100 instances, random generated with instances that haven't occurred in the training set.
 </p>
 
 <b>Version 1 with C++ and MPI</b>
@@ -23,6 +23,7 @@ Master processor (default 0) does some more calculations to find the class for e
 the class value for each instance.
 </p>
 
+<b>Compile and run:</b>
 <p>To compile: mpicxx -o (*name of exec*) main.cpp -std=c++11<br/>
 To run the exec: mpirun -np (*num of processors*) (*name of exec*)</p>
 
