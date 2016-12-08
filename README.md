@@ -1,9 +1,13 @@
 #Parallel implementation of kNN using MPI#
 
 <p>There are 3 versions of kNN implemented:<br/>
-    *Serial version with C++<br/>
-    *Version 1 with C++ and MPI<br/>
-    *Version 2 with C++ and MPI<br/>
+    1) Serial version with C++<br/>
+    2) Version 1 with C++ and MPI<br/>
+    3) Version 2 with C++ and MPI<br/>
+</p>
+
+<p>The training set: https://archive.ics.uci.edu/ml/datasets/Skin+Segmentation# <br/>
+It has 245057 instances. The test set has 100 instances, random generated that haven't occurred in the training set.
 </p>
 
 <b>Version 1 with C++ and MPI</b>
@@ -26,3 +30,4 @@ To run the exec: mpirun -np (*num of processors*) (*name of exec*)</p>
 <b>Experiment with 100 test instances (serial / version 1 / version2):</b>
 ![screen_shot_1](http://image.prntscr.com/image/94da8a0f13dc47e686112c488908dfff.png)
 
+<p>And that's it ! <br/> Hope you liked it :)</p>
