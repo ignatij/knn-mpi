@@ -66,7 +66,7 @@ class TestInstance{
     double R;
     double G;
     double B;
-    
+
 
     public:
     TestInstance(double R, double G, double B){
@@ -117,7 +117,7 @@ vector<string> split(string a,char e){
 
 
 	vector<Instance> instances;
-	
+
 	int k;
 
 
@@ -125,12 +125,12 @@ vector<string> split(string a,char e){
 	vector<set<double> > distances;
 
 int returnClassForObject(int index){
-	
+
 	int countFirstClass = 0;
 	int countSecondClass = 0;
-	
+
 	set<double>::iterator it = distances[index].begin();
-	
+
 	while(countFirstClass != k && countSecondClass != k){
 		if(distanceToClass[index].find(*it) -> second == 1){
 			countFirstClass++;
@@ -146,6 +146,7 @@ int returnClassForObject(int index){
 	else if(countSecondClass == k){
 		return 2;
 	}
+  return 0;
 }
 //adapt to the number of processors
 int getStartRange(int id){
@@ -186,11 +187,11 @@ int main(int argc, char **argv)
 
     MPI_Comm_size(MPI_COMM_WORLD, &world_size);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-		
+
     string line;
     ifstream myfile("training.txt");
- 
-	
+
+
 	//init
     if (myfile.is_open())
     {
@@ -251,29 +252,29 @@ int main(int argc, char **argv)
         res = (curr - minB) / (maxB - minB);
         instances[i].setB(res);
 
-     
+
     }
-	
+
 	//setting k = sqrt(number of training instances)
 	k = sqrt(instances.size());
 
-    
+
     ifstream new_file("test.txt");
     string new_line;
 
     vector<TestInstance>test_instances;
 
-	
-	
+
+
 	double start, end;
-	
-	
-	
+
+
+
 	for(int i = 0; i < instances.size(); i++){
 		distanceToClass.push_back(map<double, int>());
 		distances.push_back(set<double>());
 	}
-	
+
 
 	//reading test instances from test.txt
 
@@ -299,34 +300,34 @@ int main(int argc, char **argv)
         }
 
     }
-	
+
 	for(int i = 0; i < test_instances.size(); i++){
 		distances.push_back(set<double>());
-		distanceToClass.push_back(map<double, int>());	
+		distanceToClass.push_back(map<double, int>());
 	}
-	
 
-	
+
+
 	start = MPI_Wtime();
 	MPI_Status status;
-	
+
 
 	for(int i = 0; i < test_instances.size(); i++){
-		
+
 		  double r = test_instances[i].getR();
 		  double g = test_instances[i].getG();
 		  double b = test_instances[i].getB();
 
 
 		  int startRange = getStartRange(rank);
-		  int endRange = getEndRange(rank);	
-		
+		  int endRange = getEndRange(rank);
+
 		if(rank > 0){
 			int length = endRange - startRange;
-			
+
 			double arrayToSend1[length];
 			int arrayToSend2[length];
-			
+
 			int l = 0;
 			int q = 0;
 			for(int j = startRange; j < endRange; j++){
@@ -334,7 +335,7 @@ int main(int argc, char **argv)
 				arrayToSend1[l++] = distance;
 				arrayToSend2[q++] = instances[j].skin();
 			}
-			 
+
 
 			MPI_Send(&length, 1, MPI_INT, 0, rank, MPI_COMM_WORLD);
 			MPI_Send(arrayToSend1, length, MPI_DOUBLE, 0, rank * 10, MPI_COMM_WORLD);
@@ -344,36 +345,35 @@ int main(int argc, char **argv)
 			for(int j = 1; j < world_size; j++){
 			 int length;
 			 MPI_Recv(&length, 1, MPI_INT, j, j, MPI_COMM_WORLD, &status);
-	
-			 
+
+
 		 	double arrayToRecv[length];
 			int classValues[length];
-			 
+
 			MPI_Recv(arrayToRecv, length, MPI_DOUBLE, j, j * 10, MPI_COMM_WORLD, &status);
 			MPI_Recv(classValues, length, MPI_INT, j, j * 100, MPI_COMM_WORLD, &status);
-			
+
 			for(int j = 0; j < length; j++){
 				distances[i].insert(arrayToRecv[j]);
 				distanceToClass[i].insert(std::pair<double, int>(arrayToRecv[j], classValues[j]));
-				
+
 			 }
 			}
-			
-		 } 
-		 
-	}		
-	
+
+		 }
+
+	}
+
 	if(rank == 0){
-		
+
 		for(int i = 0; i < test_instances.size(); i++){
-		
+
 			int classForObject = returnClassForObject(i);
 			printf("Class for %d object: %d\n", i + 1, classForObject);
-		}	
+		}
 		end = MPI_Wtime();
 		printf("Elapsed time: %.2f seconds.\n", (end - start));
 	}
 	MPI_Finalize();
 
 }
-
