@@ -11,20 +11,27 @@
 using namespace std;
 
 class Instance{
-    private:
-    double R;
+    //private:
+
+    /*double R;
     double G;
-    double B;
-    double isSkin;
+    double B;*/
 
     public:
-    Instance(double R, double G, double B, int isSkin){
+      double letters[];// = new double[10];
+      double isSkin;
+    /*Instance(double R, double G, double B, int isSkin){
         this->R = R;
         this->G = G;
         this->B = B;
         this->isSkin = isSkin;
+    }*/
+      Instance(double letters2[], int isSkin) {
+      double[] letters = new double[10];
+      this->letters = letters2;
+      this->isSkin = isSkin;
     }
-
+    /*
     void setR(double R){
         this->R = R;
     }
@@ -35,7 +42,13 @@ class Instance{
 
     void setB(double B){
         this->B = B;
+    }*/
+    void setVal(double value, int index) {
+      letters[index] = value;
     }
+    double getVal(int index) {
+      return letters[index];
+    }/*
      double getR(){
         return R;
     }
@@ -46,20 +59,27 @@ class Instance{
 
      double getB(){
         return B;
-    }
+    }*/
 
      int skin(){
         return isSkin;
     }
 
-    double calculateDistance(double otherR, double otherG, double otherB){
+    /*double calculateDistance(double otherR, double otherG, double otherB){
         return sqrt((R - otherR) * (R - otherR) + (G - otherG) * (G - otherG) + (B - otherB) * (B - otherB));
 
+    }*/
+    double calculateDistance(double otherLetters[]) {
+      double sum = 0;
+      for(int i = 0; i < letters.length; i++) {
+        sum += (letters[i] - otherLetters[i]) * (letters[i] - otherLetters[i]);
+      }
+      return sqrt(sum);
     }
 
 };
 
-vector<string> split(string a,char e){
+vector<string> split(string a,char e){//WHAT IS THIS
     vector<string> rez;
     string cur;
     for(int ctr1=0;ctr1<a.size();ctr1++){
@@ -86,24 +106,35 @@ int main()
         while (getline(myfile,line))
         {
             vector<string> parts = split(line, ' ');
-            Instance instance(std::stod(parts[0]), std::stod(parts[1]), std::stod(parts[2]), std::stod(parts[3]));
+            Instance instance(std::stod(parts[0]), std::stod(parts[1]), std::stod(parts[2]), std::stod(parts[3]), std::stod(parts[4]), std::stod(parts[5]), std::stod(parts[6]), std::stod(parts[7]), std::stod(parts[8]), std::stod(parts[9]));
             instances.push_back(instance);
         }
         myfile.close();
     }
 
     //find min and max
-    double minR = instances[0].getR();
+    /*double minR = instances[0].getR();
     double maxR = instances[0].getR();
 
     double minG = instances[0].getG();
     double maxG = instances[0].getG();
 
     double minB = instances[0].getB();
-    double maxB = instances[0].getB();
+    double maxB = instances[0].getB();*/
+    double min[] = new double[10];
+    double max[] = new double[10];
+    for(int i = 0; i < min.length; i++) {
+      min[i] = instances[0].getVal(i);
+    }
 
     for(int i = 0; i < instances.size(); i++){
-        if(instances[i].getR() > maxR){
+      if(instances[i].getVal(i) > max[i]){
+          max[i] = instances[i].getVal(i);
+      }
+      else if(instances[i].getVal() < min[i]){
+          min[i] = instances[i].getVal(i);
+      }
+        /*if(instances[i].getR() > maxR){
             maxR = instances[i].getR();
         }
         else if(instances[i].getR() < minR){
@@ -122,13 +153,13 @@ int main()
         }
         else if(instances[i].getB() < minB){
             minB = instances[i].getB();
-        }
+        }*/
     }
 
 
     //standardization
     for(int i = 0; i < instances.size(); i++){
-        double curr = instances[i].getR();
+        /*double curr = instances[i].getR();
         double res = (curr - minR) / (maxR - minR);
         instances[i].setR(res);
 
@@ -139,7 +170,12 @@ int main()
         curr = instances[i].getB();
         res = (curr - minB) / (maxB - minB);
         instances[i].setB(res);
-
+*/
+      for(int j = 0; j < 10; j++) {
+        double curr = instances[i].getVal(j);
+        double res = (curr - min[j]) / (max[j] - minR[j]);
+        instances[i].setVal(res, j);
+      }
        // cout<<instances[i].getR()<<" "<<instances[i].getG()<<" "<<instances[i].getB()<<endl;
     }
 
@@ -168,18 +204,23 @@ int main()
 
             map<double, int> distanceToClass;
 
+            double lets[] = new double[10];
+            for(int i = 0; i < lets.length; i++) {
+              lets[i] = std::stod(parts[i]);
+              lets[i] = (lets[i] - min[i]) / (max[i] - min[i]);
+            }
 
-            double r = std::stod(parts[0]);
+            /*double r = std::stod(parts[0]);
             double g = std::stod(parts[1]);
             double b = std::stod(parts[2]);
 
             r = (r - minR) / (maxR - minR);
             g = (g - minG) / (maxG - minG);
-            b = (b - minB) / (maxB - minB);
+            b = (b - minB) / (maxB - minB);*/
 
             double minimum_distance = 500;
             for(int i = 0; i < instances.size(); i++){
-                double d = instances[i].calculateDistance(r, g, b);
+                double d = instances[i].calculateDistance(lets[0], lets[1], lets[2], lets[3], lets[4], lets[5], lets[6], lets[7], lets[8], lets[9]);
                 distances.insert(d);
                 distanceToClass.insert(std::pair<double, int> (d, instances[i].skin()));
             }
