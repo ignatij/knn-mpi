@@ -27,7 +27,6 @@ class Instance{
     double isSkin;
 
     public:
-
     Instance(double R, double G, double B, int isSkin){
         this->R = R;
         this->G = G;
@@ -131,7 +130,7 @@ class Instance{
         return seven;
     }
 
-     int skin(){
+    int skin(){
         return isSkin;
     }
 
