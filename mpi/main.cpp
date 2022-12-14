@@ -1,7 +1,6 @@
 /*
  * How to Run
- * mpicxx -o main main.cpp -std=c++11
- * mpirun -np 2 main
+ * mpicxx -o main main.cpp -std=c++11; mpirun -np 2 main; ; rm .\main.exe;
 */
 
 #include <iostream>
