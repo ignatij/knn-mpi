@@ -1,3 +1,9 @@
+/*
+ * How to Run
+ * mpicxx -o main main.cpp -std=c++11
+ * mpirun -np 2 main
+*/
+
 #include <iostream>
 #include <vector>
 #include <fstream>
